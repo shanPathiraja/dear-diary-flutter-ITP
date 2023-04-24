@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "695190391551",
+    "project_id": "dear-diary-afe8c",
+    "storage_bucket": "dear-diary-afe8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695190391551:android:19d0faf6aa18557a035aca",
+        "android_client_info": {
+          "package_name": "com.example.dear_diary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695190391551-del5f3a0mg24m8i1ms8r17qi5t6248p3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLMKKujfDK06EsOsRdHNbimbdC0dyZz74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695190391551-del5f3a0mg24m8i1ms8r17qi5t6248p3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
