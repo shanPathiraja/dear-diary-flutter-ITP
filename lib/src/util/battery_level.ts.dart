@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/services.dart';
 
 const platform = MethodChannel('com.example.dear_diary/battery');

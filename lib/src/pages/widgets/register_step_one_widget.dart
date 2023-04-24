@@ -44,9 +44,11 @@ class _RegisterStep1State extends State<RegisterStep1> {
           const SizedBox(height: 20),
           RoundedButton(
             label: "Continue",
-            onPressed: _isSubmitEnable ? () {
-              widget.onSubmitEmail(_emailController.text);
-            } : null,
+            onPressed: _isSubmitEnable
+                ? () {
+                    widget.onSubmitEmail(_emailController.text);
+                  }
+                : null,
           )
         ],
       ),

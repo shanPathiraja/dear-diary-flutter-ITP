@@ -6,37 +6,38 @@ import 'notification_button_widget.dart';
 
 class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
   final String text;
-  const CustomAppBar({super.key, required this.text,});
 
+  const CustomAppBar({
+    super.key,
+    required this.text,
+  });
 
   @override
-  State<StatefulWidget> createState() => _CustonAppBarState();
+  State<StatefulWidget> createState() => _CustomAppBarState();
 
   @override
   Size get preferredSize => AppBar().preferredSize;
-
-
 }
 
-class _CustonAppBarState extends State<CustomAppBar> {
-  User? user;
-  AuthService authService = AuthService();
+class _CustomAppBarState extends State<CustomAppBar> {
+  User? _user;
+  late final AuthService _authService = AuthService();
+
   @override
   void initState() {
     super.initState();
 
-    authService.getCurrentUser().then((value) =>
-    {
-      setState(() {
-        user = value;
-      })
-    });
+    _authService.getCurrentUser().then((value) => {
+          setState(() {
+            _user = value;
+          })
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title:  Text(widget.text),
+      title: Text(widget.text),
       actions: [
         const NotificationButton(notificationCount: 10),
         PopupMenuButton(
@@ -45,23 +46,23 @@ class _CustonAppBarState extends State<CustomAppBar> {
               return [
                 PopupMenuItem(
                     child: Row(
-                      children: [
-                        const Icon(
-                          Icons.person_2_rounded,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          user?.email ?? "",
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    )),
+                  children: [
+                    const Icon(
+                      Icons.person_2_rounded,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      _user?.email ?? "",
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ],
+                )),
                 PopupMenuItem(
                   child: TextButton(
                     onPressed: () {
-                      authService.signOut(context);
+                      _authService.signOut(context);
                     },
                     child: const Text('Logout'),
                   ),
@@ -71,5 +72,4 @@ class _CustonAppBarState extends State<CustomAppBar> {
       ],
     );
   }
-
 }

@@ -5,7 +5,8 @@ class RegisterStep2 extends StatefulWidget {
   final Function(String) onSubmitPassword;
   final bool isLoading;
 
-  const RegisterStep2({super.key, required this.onSubmitPassword, required this.isLoading});
+  const RegisterStep2(
+      {super.key, required this.onSubmitPassword, required this.isLoading});
 
   @override
   State<RegisterStep2> createState() => _RegisterStep2State();
@@ -57,18 +58,17 @@ class _RegisterStep2State extends State<RegisterStep2> {
             },
           ),
           const SizedBox(height: 20),
-           Visibility(
-             visible: widget.isLoading,
-              replacement:RoundedButton(
+          Visibility(
+              visible: widget.isLoading,
+              replacement: RoundedButton(
                 label: "Register",
                 onPressed: _isSubmitEnabled
                     ? () {
-                  widget.onSubmitPassword(_passwordController.text);
-                }
+                        widget.onSubmitPassword(_passwordController.text);
+                      }
                     : null,
-              ) ,
+              ),
               child: const CircularProgressIndicator())
-
         ],
       ),
     );

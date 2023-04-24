@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 
-class CustomTextBox extends StatelessWidget{
+class CustomTextBox extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator<String>? validator;
   final String? labelText;
   final int? minLines;
   final int? maxLines;
   final bool obscureText;
-  const CustomTextBox({super.key, required this.controller, this.validator,required this.labelText, this.minLines, this.maxLines, required this.obscureText});
+
+  const CustomTextBox(
+      {super.key,
+      required this.controller,
+      this.validator,
+      required this.labelText,
+      this.minLines,
+      this.maxLines,
+      required this.obscureText});
 
   @override
   Widget build(BuildContext context) {
-    return  TextFormField(
+    return TextFormField(
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -33,13 +41,10 @@ class CustomTextBox extends StatelessWidget{
           borderSide: BorderSide(color: Colors.redAccent),
         ),
         focusedErrorBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-              color: Colors.redAccent
-          ),
+          borderSide: BorderSide(color: Colors.redAccent),
         ),
       ),
       validator: validator,
     );
   }
-
 }

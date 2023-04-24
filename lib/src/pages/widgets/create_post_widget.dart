@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dear_diary/src/services/post_service.dart';
 import 'package:flutter/material.dart';
-import '../../models/post.dart';
+import '../../models/post_model.dart';
 import '../diary_page_page.dart';
 
 typedef OnCreatePostSuccess = void Function();
@@ -39,14 +39,18 @@ class _CreatePostState extends State<CreatePost> {
               isExpended = false;
               isLoading = false;
             }),
-            Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (BuildContext context) => const DiaryPage(),
-            ),)
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const DiaryPage(),
+              ),
+            )
           });
     }
   }
+
   @override
-  void dispose(){
+  void dispose() {
     _contentController.dispose();
     _titleController.dispose();
     super.dispose();

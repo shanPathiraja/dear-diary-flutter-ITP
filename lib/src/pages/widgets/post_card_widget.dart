@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../../models/post.dart';
+import '../../models/post_model.dart';
 import '../post_display_page.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key, required this.post});
-
   final Post post;
+
+  const PostCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => PostDisplay(
-                  post: post,
-                )));
+                      post: post,
+                    )));
       },
       child: Card(
         color: Colors.white.withOpacity(0.4),
@@ -48,10 +48,7 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                      onPressed: () => {
-
-                      },
-                      child: const Text('see more')),
+                      onPressed: () => {}, child: const Text('see more')),
                 ],
               ),
             )),

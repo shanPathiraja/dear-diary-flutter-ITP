@@ -1,6 +1,6 @@
 import 'package:dear_diary/src/pages/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:dear_diary/src/models/post.dart';
+import 'package:dear_diary/src/models/post_model.dart';
 
 class PostDisplay extends StatefulWidget {
   final Post post;

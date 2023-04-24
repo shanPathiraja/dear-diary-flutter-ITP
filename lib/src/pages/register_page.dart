@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dear_diary/src/pages/login_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:dear_diary/src/pages/widgets/register_step_one_widget.dart';

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-class NotificationButton extends StatelessWidget{
-  const NotificationButton({super.key, required this.notificationCount});
+class NotificationButton extends StatelessWidget {
   final int notificationCount;
+
+  const NotificationButton({super.key, required this.notificationCount});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -29,7 +31,7 @@ class NotificationButton extends StatelessWidget{
                       shape: BoxShape.circle,
                       color: const Color(0xffc32c37),
                       border: Border.all(color: Colors.white, width: 1)),
-                  child:  Padding(
+                  child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Center(
                       child: Text(
@@ -42,8 +44,6 @@ class NotificationButton extends StatelessWidget{
               ),
             ],
           ),
-        )
-    );
+        ));
   }
-
 }
