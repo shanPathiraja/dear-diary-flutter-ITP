@@ -26,11 +26,19 @@ class Post {
     };
   }
 
-  getTitle() {
+ String? getTitle() {
     return title;
   }
 
-  getContent() {
+  String? getContentTruncated(int truncate) {
+    if ( (content?.length)! < truncate) {
+      return content;
+    }
+
+    return content?.replaceRange(truncate, content?.length, "...");
+  }
+
+  String? getContent(){
     return content;
   }
 }

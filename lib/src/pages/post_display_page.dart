@@ -16,7 +16,7 @@ class _PostDisplayState extends State<PostDisplay> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        text: widget.post.getTitle(),
+        text: widget.post.getTitle() ?? "no-title",
       ),
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -30,7 +30,7 @@ class _PostDisplayState extends State<PostDisplay> {
         child: Column(
           children: [
             Text(
-              widget.post.getTitle(),
+              widget.post.getTitle() ?? "no-title",
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
@@ -40,7 +40,7 @@ class _PostDisplayState extends State<PostDisplay> {
               height: 30,
             ),
             Text(
-              widget.post.getContent(),
+              widget.post.getContent() ?? "no-content",
               style: const TextStyle(fontSize: 25),
             ),
           ],

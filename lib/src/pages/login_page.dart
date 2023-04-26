@@ -1,3 +1,4 @@
+import 'package:dear_diary/src/dto/auth_dto.dart';
 import 'package:dear_diary/src/pages/diary_page_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:dear_diary/src/pages/widgets/rounded_button_widget.dart';
@@ -21,6 +22,7 @@ class _LoginState extends State<Login> {
   final _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
   bool _enableSubmit = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -36,11 +38,74 @@ class _LoginState extends State<Login> {
     });
     super.initState();
   }
+  void onSignInCompleted(AuthDto value){
+    if (value.isError)
+    {
+      String title;
+      String content;
+      switch(value.error?.code ?? ""){
+        case "user-not-found":
+          title = "User Not found";
+          content = "Please check your email";
+          break;
+        case "network-request-failed":
+          title = 'network request failed';
+          content = "Please check internet connection";
+          break;
+        case "wrong-password":
+          title = 'Invalid Password';
+          content = "Please check Password and try again";
+          break;
+        default:
+           title = 'Unknown Error';
+           content = "Please try again later";
+          break;
+      }
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(title),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:  [Text(content)],
+            ),
+            icon: const Icon(
+              Icons.error,
+              size: 50,
+            ),
+            iconColor: Colors.redAccent,
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Ok"))
+            ],
+          ));
+    }
+    else
+    {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const DiaryPage(),
+        ),
+      );
+    }
+    setState(() {
+    _isLoading = false;
+    });
+  }
 
   void onSubmit() {
     if (_formKey.currentState!.validate()) {
-      _authService.signIn(_emailController.text.trim(),
-          _passwordController.text.trim(), context);
+      setState(() {
+        _isLoading = true;
+      });
+      _authService
+          .signIn(_emailController.text.trim(), _passwordController.text.trim(),
+              context)
+          .then(onSignInCompleted);
     }
   }
 
@@ -89,30 +154,38 @@ class _LoginState extends State<Login> {
                 labelText: 'Password',
               ),
               const SizedBox(height: 20),
-              RoundedButton(
-                onPressed: _enableSubmit
-                    ? () {
-                        onSubmit();
-                      }
-                    : null,
-                label: 'Login',
-              ),
-              TextButton(
-                child: const Text(
-                  'Don\'t have an account?',
-                  style: TextStyle(
-                    color: Colors.black,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Register(),
+              Visibility(
+                visible: !_isLoading,
+                replacement: const CircularProgressIndicator(),
+                child: Column(
+                  children: [
+                    RoundedButton(
+                      onPressed: _enableSubmit
+                          ? () {
+                              onSubmit();
+                            }
+                          : null,
+                      label: 'Login',
                     ),
-                  );
-                },
+                    TextButton(
+                      child: const Text(
+                        'Don\'t have an account?',
+                        style: TextStyle(
+                          color: Colors.black,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Register(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

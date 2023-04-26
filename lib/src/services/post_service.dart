@@ -15,7 +15,8 @@ class PostService {
   Future<List<Post>> getPosts() async {
     QuerySnapshot querySnapshot = await firestoreInstance
         .collection(collectionPath)
-        .where('userId', isEqualTo: userId)
+        .where('userId', isEqualTo: userId).
+        orderBy("date", descending: true)
         .get();
     List<Post> posts = [];
     for (var doc in querySnapshot.docs) {

@@ -1,7 +1,6 @@
 import 'package:dear_diary/src/pages/login_page.dart';
+import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
 import '../services/auth_service.dart';
 import 'diary_page_page.dart';
 
@@ -12,38 +11,38 @@ class InitialPage extends StatefulWidget {
   State<StatefulWidget> createState() => _InitialPageState();
 }
 
-class _InitialPageState extends State<InitialPage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller =
-      AnimationController(vsync: this, duration: const Duration(seconds: 10))
-        ..repeat();
-  final AuthService authService = AuthService();
+class _InitialPageState extends State<InitialPage> {
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
-    authService.getCurrentUser().then((value) {
-      if (value != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const DiaryPage(),
-          ),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const Login(),
-          ),
-        );
-      }
+    _authService.getCurrentUser().then((value) {
+      Future.delayed(const Duration(seconds: 5)).then((value) => {
+            if (value != null)
+              {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const DiaryPage(),
+                  ),
+                ),
+              }
+            else
+              {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const Login(),
+                  ),
+                ),
+              }
+          });
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -54,18 +53,9 @@ class _InitialPageState extends State<InitialPage>
             child: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (_, child) {
-              return Transform.rotate(
-                angle: _controller.value * 2 * math.pi,
-                child: child,
-              );
-            },
-            child: const Image(image: AssetImage("images/icon.png")),
-          ),
-          const Text(
+        children: const [
+         AnimatedLogo(width: 200,),
+          Text(
             "Dear Diary",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
           )

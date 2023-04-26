@@ -31,8 +31,8 @@ class _RegisterState extends State<Register> {
     setState(() {
       isLoading = true;
     });
-    _authService.signUp(email, password).then((user) => {
-          if (user == null)
+    _authService.signUp(email, password).then((authData) => {
+          if (authData.isError)
             {
               showDialog(
                 context: context,

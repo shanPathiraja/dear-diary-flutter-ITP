@@ -28,11 +28,10 @@ class PostCard extends StatelessWidget {
         child: Container(
             padding: const EdgeInsets.all(15),
             child: Align(
-              alignment: Alignment.centerLeft,
               child: Column(
                 children: [
                   Text(
-                    post.getTitle(),
+                    post.getTitle()??"",
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -40,10 +39,9 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    post.getContent(),
+                    post.getContentTruncated(75) ?? "",
                     style: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),

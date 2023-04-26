@@ -15,7 +15,6 @@ class DiaryPage extends StatefulWidget {
 
 class _DiaryPageState extends State<DiaryPage> {
   List<Post> _posts = [];
-
   bool _isLoading = true;
   final PostService _postService = PostService();
 
@@ -59,7 +58,7 @@ class _DiaryPageState extends State<DiaryPage> {
                 child: ListView(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  children: _posts.map((e) => PostCard(post: e)).toList(),
+                  children: _posts.map((p) => PostCard(post: p)).toList(),
                 ))
           ],
         ),

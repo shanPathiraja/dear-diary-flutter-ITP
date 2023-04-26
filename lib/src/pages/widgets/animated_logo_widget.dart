@@ -33,7 +33,7 @@ class _AnimatedLogoState extends State<AnimatedLogo>
         );
       },
       child: Image(
-        image: AssetImage("images/icon.png"),
+        image: const AssetImage("images/icon.png"),
         width: widget.width,
       ),
     );

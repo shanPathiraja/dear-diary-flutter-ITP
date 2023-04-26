@@ -12,6 +12,7 @@ class BatteryLevel extends StatefulWidget {
 
 class _BatteryLevelState extends State<BatteryLevel> {
   int _batteryLevel = -1;
+  final BatteryLevelProvider _batteryLevelProvider = BatteryLevelProvider();
 
   @override
   void initState() {
@@ -20,7 +21,7 @@ class _BatteryLevelState extends State<BatteryLevel> {
     Timer.periodic(
         const Duration(seconds: 10),
         (Timer t) => {
-              getBatteryLevel().then((value) => {
+             _batteryLevelProvider.getBatteryLevel().then((value) => {
                     if (value != _batteryLevel)
                       {
                         setState(() {
@@ -29,6 +30,13 @@ class _BatteryLevelState extends State<BatteryLevel> {
                       }
                   })
             });
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+
+
   }
 
   @override
