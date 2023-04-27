@@ -1,16 +1,14 @@
-import 'dart:developer';
-
-import 'package:dear_diary/src/services/post_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/post/bloc.dart';
+import '../../bloc/post/event.dart';
 import '../../models/post_model.dart';
-import '../diary_page_page.dart';
 
 typedef OnCreatePostSuccess = void Function();
 
 class CreatePost extends StatefulWidget {
-  final OnCreatePostSuccess onCreatePostSuccess;
-
-  const CreatePost({super.key, required this.onCreatePostSuccess});
+  const CreatePost({super.key});
 
   @override
   State<CreatePost> createState() => _CreatePostState();
@@ -21,31 +19,14 @@ class _CreatePostState extends State<CreatePost> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   bool isExpended = false;
-  bool isLoading = false;
 
   onSubmit() {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        isLoading = true;
-      });
       Post post = Post(
         title: _titleController.text,
         content: _contentController.text,
       );
-      PostService postService = PostService();
-      postService.save(post).then((value) => {
-            log("Post saved!"),
-            setState(() {
-              isExpended = false;
-              isLoading = false;
-            }),
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const DiaryPage(),
-              ),
-            )
-          });
+      context.read<PostBloc>().add(AddPost(post: post));
     }
   }
 

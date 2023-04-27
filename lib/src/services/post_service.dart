@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/post_model.dart';
 import 'auth_service.dart';
 
-class PostService {
+class PostServiceOld {
   String collectionPath = "posts";
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   String? userId;
 
-  PostService() {
+  PostServiceOld() {
     AuthService authService = AuthService();
     authService.getUserId().then((value) => {userId = value});
   }
