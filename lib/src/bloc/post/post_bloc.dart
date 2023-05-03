@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 
 import '../../repository/post_repository.dart';
-import 'event.dart';
-import 'state.dart';
+import 'post_event.dart';
+import 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository postRepository;

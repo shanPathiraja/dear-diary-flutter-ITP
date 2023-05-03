@@ -1,4 +1,4 @@
-import 'package:dear_diary/src/bloc/post/event.dart';
+import 'package:dear_diary/src/bloc/post/post_event.dart';
 import 'package:dear_diary/src/pages/widgets/app_bar_widget.dart';
 import 'package:dear_diary/src/pages/widgets/battery_level_widget.ts.dart';
 import 'package:dear_diary/src/pages/widgets/post_card_widget.dart';
@@ -7,8 +7,8 @@ import 'package:dear_diary/src/repository/post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/post/bloc.dart';
-import '../bloc/post/state.dart';
+import '../bloc/post/post_bloc.dart';
+import '../bloc/post/post_state.dart';
 import 'widgets/create_post_widget.dart';
 
 class DiaryPage extends StatefulWidget {

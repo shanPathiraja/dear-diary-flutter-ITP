@@ -1,3 +1,5 @@
+import 'package:dear_diary/src/bloc/auth/auth_bloc.dart';
+import 'package:dear_diary/src/bloc/auth/auth_event.dart';
 import 'package:dear_diary/src/dto/auth_dto.dart';
 import 'package:dear_diary/src/pages/diary_page_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
@@ -6,6 +8,7 @@ import 'package:dear_diary/src/pages/widgets/text_box_widget.dart';
 import 'package:dear_diary/src/services/auth_service.dart';
 import 'package:dear_diary/src/util/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'register_page.dart';
 
@@ -38,12 +41,12 @@ class _LoginState extends State<Login> {
     });
     super.initState();
   }
-  void onSignInCompleted(AuthDto value){
-    if (value.isError)
-    {
+
+  void onSignInCompleted(AuthDto value) {
+    if (value.isError) {
       String title;
       String content;
-      switch(value.error?.code ?? ""){
+      switch (value.error?.code ?? "") {
         case "user-not-found":
           title = "User Not found";
           content = "Please check your email";
@@ -57,34 +60,32 @@ class _LoginState extends State<Login> {
           content = "Please check Password and try again";
           break;
         default:
-           title = 'Unknown Error';
-           content = "Please try again later";
+          title = 'Unknown Error';
+          content = "Please try again later";
           break;
       }
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(title),
-            content: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children:  [Text(content)],
-            ),
-            icon: const Icon(
-              Icons.error,
-              size: 50,
-            ),
-            iconColor: Colors.redAccent,
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Ok"))
-            ],
-          ));
-    }
-    else
-    {
+                title: Text(title),
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Text(content)],
+                ),
+                icon: const Icon(
+                  Icons.error,
+                  size: 50,
+                ),
+                iconColor: Colors.redAccent,
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text("Ok"))
+                ],
+              ));
+    } else {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -93,7 +94,7 @@ class _LoginState extends State<Login> {
       );
     }
     setState(() {
-    _isLoading = false;
+      _isLoading = false;
     });
   }
 
@@ -102,10 +103,14 @@ class _LoginState extends State<Login> {
       setState(() {
         _isLoading = true;
       });
-      _authService
-          .signIn(_emailController.text.trim(), _passwordController.text.trim(),
-              context)
-          .then(onSignInCompleted);
+      // _authService
+      //     .signIn(_emailController.text.trim(), _passwordController.text.trim(),
+      //         context)
+      //     .then(onSignInCompleted);
+
+      context.read<AuthBloc>().add(LogInRequested(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim()));
     }
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/post/bloc.dart';
-import '../../bloc/post/event.dart';
+import '../../bloc/post/post_bloc.dart';
+import '../../bloc/post/post_event.dart';
 import '../../models/post_model.dart';
 
 typedef OnCreatePostSuccess = void Function();
