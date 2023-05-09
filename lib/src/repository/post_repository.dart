@@ -1,19 +1,31 @@
-
-import 'package:dear_diary/src/repository/post_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dear_diary/src/repository/auth_repository.dart';
 
 import '../models/post_model.dart';
 
 class PostRepository {
-  final PostService postService;
+  FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+  String? userId;
 
-  PostRepository({@required required this.postService});
+  PostRepository() {
+    AuthRepository authRepository = AuthRepository();
+    authRepository.getUser().then((value) => {userId = value.uid});
+  }
 
   Future<void> addPost(Post post) async {
-    return await postService.addPost(post);
+    post.date = DateTime.now().toString();
+    post.userId = userId;
+    await firestoreInstance.collection('posts').add(post.toMap());
   }
 
   Future<List<Post>> getPosts() async {
-    return await postService.getPosts();
+    QuerySnapshot querySnapshot =
+        await firestoreInstance.collection('posts').get();
+    List<Post> posts = [];
+    for (var doc in querySnapshot.docs) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      posts.add(Post.fromMap(data, id: doc.id));
+    }
+    return posts;
   }
 }

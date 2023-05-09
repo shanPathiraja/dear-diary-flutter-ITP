@@ -38,7 +38,7 @@ enum AuthStatus{
   const AuthState.error(String errorMessage) : this._(null, status: AuthStatus.unauthenticated, errorMessage: errorMessage);
 
   @override
-  List<Object?> get props => [user, status];
+  List<Object?> get props => [user, status, errorMessage, userStream];
 
   AuthState copyWith({
     AuthStatus? status,

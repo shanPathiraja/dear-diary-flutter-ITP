@@ -1,9 +1,10 @@
+import 'package:dear_diary/src/bloc/auth/auth_bloc.dart';
+import 'package:dear_diary/src/bloc/auth/auth_state.dart';
 import 'package:dear_diary/src/bloc/post/post_event.dart';
+import 'package:dear_diary/src/pages/login_page.dart';
 import 'package:dear_diary/src/pages/widgets/app_bar_widget.dart';
 import 'package:dear_diary/src/pages/widgets/battery_level_widget.ts.dart';
 import 'package:dear_diary/src/pages/widgets/post_card_widget.dart';
-import 'package:dear_diary/src/repository/post_repository.dart';
-import 'package:dear_diary/src/repository/post_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,48 +33,54 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-        create: (context) => PostRepository(postService: PostService()),
-            child: BlocProvider<PostBloc>(
-        create: (context)=> PostBloc(context.read<PostRepository>())..add(GetPosts()),
-              child: Scaffold(
-                appBar: const CustomAppBar(
-                  text: "Dear Diary",
-                ),
-                backgroundColor: Colors.blueAccent,
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const BatteryLevel(),
-                      CreatePost(),
-                      BlocBuilder<PostBloc, PostState>(
-                        builder: (context, state) {
-                          print(state);
-                          if (state.status != PostEventStatus.loading) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: state.posts.length,
-                              itemBuilder: (context, index) {
-                                return PostCard(
-                                  post: state.posts[index],
-
-                                );
-                              },
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+    return Scaffold(
+      appBar: const CustomAppBar(
+        text: "Dear Diary",
+      ),
+      backgroundColor: Colors.blueAccent,
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state.status == AuthStatus.unauthenticated) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const Login(),
               ),
-    ),
-    
+            );
+          }
+        },
+        child: BlocProvider<PostBloc>(
+          create: (context) => PostBloc()..add(GetPosts()),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const BatteryLevel(),
+                const CreatePost(),
+                BlocBuilder<PostBloc, PostState>(
+                  builder: (context, state) {
+                    if (state.status != PostEventStatus.loading) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.posts.length,
+                        itemBuilder: (context, index) {
+                          return PostCard(
+                            post: state.posts[index],
+                          );
+                        },
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

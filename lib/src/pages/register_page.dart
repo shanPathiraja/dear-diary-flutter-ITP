@@ -1,11 +1,11 @@
 import 'package:dear_diary/src/pages/login_page.dart';
+import 'package:dear_diary/src/pages/register_page_two.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
-import 'package:dear_diary/src/pages/widgets/register_step_one_widget.dart';
-import 'package:dear_diary/src/pages/widgets/register_step_two_widget.dart';
+import 'package:dear_diary/src/pages/widgets/rounded_button_widget.dart';
+import 'package:dear_diary/src/pages/widgets/text_box_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../services/auth_service.dart';
-import 'diary_page_page.dart';
+import '../util/validators.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -15,63 +15,23 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String email = '';
-  bool isEmailSubmitted = false;
   bool isLoading = false;
-  final AuthService _authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  bool _isSubmitEnable = false;
 
-  void onSubmitEmail(String email) {
-    setState(() {
-      this.email = email;
-      isEmailSubmitted = true;
-    });
+  void onSubmitEmail() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                RegisterStepTwo(email: _emailController.text.trim())));
   }
 
-  void onSubmitPassword(String password) async {
-    setState(() {
-      isLoading = true;
-    });
-    _authService.signUp(email, password).then((authData) => {
-          if (authData.isError)
-            {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("Registration Failed"),
-                  content: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [Text("Please try again")],
-                  ),
-                  icon: const Icon(
-                    Icons.error,
-                    size: 50,
-                  ),
-                  iconColor: Colors.redAccent,
-                  actions: [
-                    MaterialButton(
-                      child: const Text("Ok"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  ],
-                ),
-              ),
-              setState(() {
-                isLoading = false;
-                isEmailSubmitted = false;
-              }),
-            }
-          else
-            {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const DiaryPage(),
-                ),
-              )
-            }
-        });
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,14 +63,32 @@ class _RegisterState extends State<Register> {
                     const AnimatedLogo(
                       width: 100,
                     ),
-                    Visibility(
-                      visible: isEmailSubmitted,
-                      replacement: RegisterStep1(
-                        onSubmitEmail: onSubmitEmail,
-                      ),
-                      child: RegisterStep2(
-                        onSubmitPassword: onSubmitPassword,
-                        isLoading: isLoading,
+                    Form(
+                      key: _formKey,
+                      onChanged: () => setState(() {
+                        _isSubmitEnable = _formKey.currentState!.validate();
+                      }),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 20),
+                          CustomTextBox(
+                            controller: _emailController,
+                            validator: (value) =>
+                                Validators.isValidEmail(value),
+                            labelText: 'Email',
+                            obscureText: false,
+                          ),
+                          const SizedBox(height: 20),
+                          RoundedButton(
+                            label: "Continue",
+                            onPressed: _isSubmitEnable
+                                ? () {
+                                    onSubmitEmail();
+                                  }
+                                : null,
+                          )
+                        ],
                       ),
                     ),
                     Visibility(
