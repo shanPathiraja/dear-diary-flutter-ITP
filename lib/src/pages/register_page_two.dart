@@ -1,14 +1,17 @@
-import 'package:dear_diary/src/bloc/auth/auth_state.dart';
-import 'package:dear_diary/src/pages/diary_page_page.dart';
+import 'package:dear_diary/src/cubit/auth/auth_cubit.dart';
 import 'package:dear_diary/src/pages/login_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:dear_diary/src/pages/widgets/rounded_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/auth/auth_bloc.dart';
-import '../bloc/auth/auth_event.dart';
 import '../util/validators.dart';
+
+class RegisterStepTwoArgs {
+  final String email;
+
+  const RegisterStepTwoArgs({required this.email});
+}
 
 class RegisterStepTwo extends StatefulWidget {
   final String email;
@@ -25,40 +28,33 @@ class _RegisterStepTwoState extends State<RegisterStepTwo> {
   bool _isSubmitEnabled = false;
 
   void onSubmitPassword() async {
-    context.read<AuthBloc>().add(
-          RegisterRequested(
-            email: widget.email,
-            password: _passwordController.text,
-          ),
+    context.read<AuthCubit>().register(
+          email: widget.email,
+          password: _passwordController.text,
         );
+    // context.read<AuthBloc>().add(
+    //       RegisterRequested(
+    //         email: widget.email,
+    //         password: _passwordController.text,
+    //       ),
+    //     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state.status == AuthStatus.authenticated) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const DiaryPage(),
-              ),
-            );
-          }
-        },
-        child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('images/blue_bg.jpg'),
-                fit: BoxFit.cover,
-              ),
+      body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/blue_bg.jpg'),
+              fit: BoxFit.cover,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -137,7 +133,6 @@ class _RegisterStepTwoState extends State<RegisterStepTwo> {
                 ),
               ],
             )),
-      ),
     );
   }
 }

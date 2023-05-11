@@ -1,37 +1,31 @@
-import 'package:dear_diary/src/pages/login_page.dart';
-import 'package:dear_diary/src/repository/auth_repository.dart';
+import 'package:dear_diary/src/cubit/auth/auth_cubit.dart';
+import 'package:dear_diary/src/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/auth/auth_bloc.dart';
-import 'bloc/auth/auth_event.dart';
+final _navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => AuthRepository(),
-      child: BlocProvider(
-        create: (context) =>
-            AuthBloc(context.read<AuthRepository>())..add(AppStarted()),
-        child: MaterialApp(
-          title: 'Dear Diary',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/blue_bg.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: const Login()),
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          _navigatorKey.currentState!.pushReplacementNamed(Routes.home);
+        } else if (state is Unauthenticated) {
+          _navigatorKey.currentState!.pushReplacementNamed(Routes.login);
+        }
+      },
+      child: MaterialApp(
+        title: 'Dear Diary',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
+        navigatorKey: _navigatorKey,
+        onGenerateRoute: Routes.routes,
+        initialRoute: Routes.splash,
       ),
     );
   }

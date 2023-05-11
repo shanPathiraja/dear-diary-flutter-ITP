@@ -19,8 +19,13 @@ class PostRepository {
   }
 
   Future<List<Post>> getPosts() async {
-    QuerySnapshot querySnapshot =
-        await firestoreInstance.collection('posts').get();
+    QuerySnapshot querySnapshot = await firestoreInstance
+        .collection('posts')
+        .orderBy(
+          'date',
+          descending: true,
+        )
+        .get();
     List<Post> posts = [];
     for (var doc in querySnapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

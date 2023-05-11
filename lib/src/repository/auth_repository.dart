@@ -21,13 +21,11 @@ class AuthRepository{
   }
 
   Future<UserCredential> register(String email, String password) {
-    return _auth.createUserWithEmailAndPassword(email: email, password: password);
+    return _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
   }
 
-  Stream<User?> get onAuthStateChanged {
-    return _auth.authStateChanges();
+  Stream<String?> get onAuthStateChanged {
+    return _auth.authStateChanges().asyncMap((user) => user?.uid);
   }
-
-
-
 }

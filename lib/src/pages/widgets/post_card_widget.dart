@@ -1,3 +1,4 @@
+import 'package:dear_diary/src/navigation/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/post_model.dart';
@@ -12,12 +13,8 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PostDisplay(
-                      post: post,
-                    )));
+        Navigator.pushNamed(context, Routes.postDisplay,
+            arguments: PostDisplayArgs(post: post));
       },
       child: Card(
         color: Colors.white.withOpacity(0.4),

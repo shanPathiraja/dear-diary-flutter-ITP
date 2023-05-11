@@ -14,6 +14,7 @@ class BatteryLevelProvider {
     } on PlatformException catch (e) {
       batteryLevel = -1;
       log(e.toString());
+      throw Exception(e);
     }
     return batteryLevel;
   }
@@ -27,6 +28,7 @@ class BatteryLevelProvider {
       } on PlatformException catch (e) {
         batteryLevel = -1;
         log(e.toString());
+        throw Exception(e);
       }
       yield batteryLevel;
       await Future.delayed(const Duration(seconds: 5), () {});

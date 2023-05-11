@@ -1,8 +1,7 @@
+import 'package:dear_diary/src/cubit/post/post_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/post/post_bloc.dart';
-import '../../bloc/post/post_event.dart';
 import '../../models/post_model.dart';
 
 typedef OnCreatePostSuccess = void Function();
@@ -26,7 +25,12 @@ class _CreatePostState extends State<CreatePost> {
         title: _titleController.text,
         content: _contentController.text,
       );
-      context.read<PostBloc>().add(AddPost(post: post));
+      context.read<PostCubit>().addPost(post: post);
+      _titleController.clear();
+      _contentController.clear();
+      setState(() {
+        isExpended = false;
+      });
     }
   }
 
@@ -87,7 +91,7 @@ class _CreatePostState extends State<CreatePost> {
                         border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
+                            BorderRadius.all(Radius.circular(10))),
                         labelText: 'Content',
                       ),
                       validator: (value) {

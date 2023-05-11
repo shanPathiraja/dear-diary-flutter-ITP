@@ -1,6 +1,12 @@
+import 'package:dear_diary/src/models/post_model.dart';
 import 'package:dear_diary/src/pages/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:dear_diary/src/models/post_model.dart';
+
+class PostDisplayArgs {
+  final Post post;
+
+  const PostDisplayArgs({required this.post});
+}
 
 class PostDisplay extends StatefulWidget {
   final Post post;

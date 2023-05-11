@@ -1,3 +1,4 @@
+import 'package:dear_diary/src/navigation/routes.dart';
 import 'package:dear_diary/src/pages/login_page.dart';
 import 'package:dear_diary/src/pages/register_page_two.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
@@ -21,11 +22,11 @@ class _RegisterState extends State<Register> {
   bool _isSubmitEnable = false;
 
   void onSubmitEmail() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                RegisterStepTwo(email: _emailController.text.trim())));
+    Navigator.pushNamed(
+      context,
+      Routes.registerTwo,
+      arguments: RegisterStepTwoArgs(email: _emailController.text.trim()),
+    );
   }
 
   @override
@@ -84,8 +85,8 @@ class _RegisterState extends State<Register> {
                             label: "Continue",
                             onPressed: _isSubmitEnable
                                 ? () {
-                                    onSubmitEmail();
-                                  }
+                              onSubmitEmail();
+                            }
                                 : null,
                           )
                         ],

@@ -1,9 +1,8 @@
-import 'package:dear_diary/src/bloc/auth/auth_bloc.dart';
+import 'package:dear_diary/src/cubit/auth/auth_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/auth/auth_event.dart';
 import '../../services/auth_service.dart';
 import 'notification_button_widget.dart';
 
@@ -65,7 +64,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 PopupMenuItem(
                   child: TextButton(
                     onPressed: () {
-                      context.read<AuthBloc>().add(LogOutRequested());
+                      context.read<AuthCubit>().signOut();
                     },
                     child: const Text('Logout'),
                   ),
