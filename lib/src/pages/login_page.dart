@@ -1,10 +1,8 @@
 import 'package:dear_diary/src/cubit/auth/auth_cubit.dart';
 import 'package:dear_diary/src/navigation/routes.dart';
-import 'package:dear_diary/src/pages/diary_page_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:dear_diary/src/pages/widgets/rounded_button_widget.dart';
 import 'package:dear_diary/src/pages/widgets/text_box_widget.dart';
-import 'package:dear_diary/src/services/auth_service.dart';
 import 'package:dear_diary/src/util/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,24 +18,8 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
   bool _enableSubmit = false;
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    _authService.getCurrentUser().then((value) {
-      if (value != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const DiaryPage(),
-          ),
-        );
-      }
-    });
-    super.initState();
-  }
 
   // void onSignInCompleted(AuthDto value) {
   //   if (value.isError) {
