@@ -1,32 +1,34 @@
 import 'package:dear_diary/src/models/post_model.dart';
 import 'package:equatable/equatable.dart';
 
-enum PostEventStatus {
-  initial,
-  loading,
-  success,
-  failure,
+abstract class PostState extends Equatable {
+  const PostState();
 }
 
-class PostState extends Equatable {
-  final PostEventStatus status;
+class PostInitial extends PostState {
+  @override
+  List<Object> get props => [];
+}
+
+class PostLoading extends PostState {
+  @override
+  List<Object> get props => [];
+}
+
+class PostLoaded extends PostState {
   final List<Post> posts;
 
-  const PostState({
-    this.status = PostEventStatus.initial,
-    this.posts = const <Post>[],
-  });
+  const PostLoaded(this.posts);
 
   @override
-  List<Object?> get props => [status, posts];
+  List<Object> get props => [posts];
+}
 
-  PostState copyWith({
-    PostEventStatus? status,
-    List<Post>? posts,
-  }) {
-    return PostState(
-      status: status ?? this.status,
-      posts: posts ?? this.posts,
-    );
-  }
+class PostError extends PostState {
+  final String message;
+
+  const PostError(this.message);
+
+  @override
+  List<Object> get props => [message];
 }

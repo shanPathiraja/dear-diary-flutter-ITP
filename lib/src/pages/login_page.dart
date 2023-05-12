@@ -1,11 +1,9 @@
 import 'package:dear_diary/src/bloc/auth/auth_bloc.dart';
 import 'package:dear_diary/src/bloc/auth/auth_event.dart';
-import 'package:dear_diary/src/dto/auth_dto.dart';
 import 'package:dear_diary/src/pages/diary_page_page.dart';
 import 'package:dear_diary/src/pages/widgets/animated_logo_widget.dart';
 import 'package:dear_diary/src/pages/widgets/rounded_button_widget.dart';
 import 'package:dear_diary/src/pages/widgets/text_box_widget.dart';
-import 'package:dear_diary/src/services/auth_service.dart';
 import 'package:dear_diary/src/util/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,80 +22,8 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
   bool _enableSubmit = false;
   bool _isLoading = false;
-
-  @override
-  void initState() {
-    _authService.getCurrentUser().then((value) {
-      if (value != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const DiaryPage(),
-          ),
-        );
-      }
-    });
-    super.initState();
-  }
-
-  void onSignInCompleted(AuthDto value) {
-    if (value.isError) {
-      String title;
-      String content;
-      switch (value.error?.code ?? "") {
-        case "user-not-found":
-          title = "User Not found";
-          content = "Please check your email";
-          break;
-        case "network-request-failed":
-          title = 'network request failed';
-          content = "Please check internet connection";
-          break;
-        case "wrong-password":
-          title = 'Invalid Password';
-          content = "Please check Password and try again";
-          break;
-        default:
-          title = 'Unknown Error';
-          content = "Please try again later";
-          break;
-      }
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: Text(title),
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Text(content)],
-                ),
-                icon: const Icon(
-                  Icons.error,
-                  size: 50,
-                ),
-                iconColor: Colors.redAccent,
-                actions: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("Ok"))
-                ],
-              ));
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const DiaryPage(),
-        ),
-      );
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   void onSubmit() {
     if (_formKey.currentState!.validate()) {
@@ -116,7 +42,7 @@ class _LoginState extends State<Login> {
     return Scaffold(
         body: BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == AuthStatus.authenticated) {
+        if (state is AuthAuthenticated) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -124,10 +50,36 @@ class _LoginState extends State<Login> {
             ),
           );
         }
+        if (state is AuthError) {
+          showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text(state.title),
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text(state.message)],
+                    ),
+                    icon: const Icon(
+                      Icons.error,
+                      size: 50,
+                    ),
+                    iconColor: Colors.redAccent,
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("Ok"))
+                    ],
+                  ));
+          setState(() {
+            _isLoading = false;
+          });
+        }
       },
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if (state.status == AuthStatus.loading) {
+          if (state is AuthLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );

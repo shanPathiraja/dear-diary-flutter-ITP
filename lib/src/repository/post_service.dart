@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dear_diary/src/models/post_model.dart';
-
-import '../services/auth_service.dart';
+import 'package:dear_diary/src/repository/auth_repository.dart';
 
 class PostService{
   FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
   String? userId;
 
-  PostService(){
-    AuthService authService = AuthService();
-    authService.getUserId().then((value) => {userId = value});
+  PostService() {
+    AuthRepository _authRepository = AuthRepository();
+    _authRepository.getUser().then((value) => userId = value.uid);
   }
 
   Future<void> addPost(Post post) async {

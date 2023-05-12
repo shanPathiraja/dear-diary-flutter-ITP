@@ -1,10 +1,9 @@
 import 'package:dear_diary/src/bloc/auth/auth_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dear_diary/src/bloc/auth/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/auth/auth_event.dart';
-import '../../services/auth_service.dart';
 import 'notification_button_widget.dart';
 
 class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -23,20 +22,6 @@ class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  User? _user;
-  late final AuthService _authService = AuthService();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _authService.getCurrentUser().then((value) => {
-          setState(() {
-            _user = value;
-          })
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -56,10 +41,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       size: 30,
                     ),
                     const SizedBox(width: 10),
-                    Text(
-                      _user?.email ?? "",
-                      style: const TextStyle(fontSize: 15),
-                    ),
+                    BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                      if (state is AuthAuthenticated) {
+                        return Text((state.user.email) as String);
+                      }
+                      return const Text('Loading...');
+                    }),
                   ],
                 )),
                 PopupMenuItem(

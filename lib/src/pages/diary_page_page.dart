@@ -40,7 +40,7 @@ class _DiaryPageState extends State<DiaryPage> {
       backgroundColor: Colors.blueAccent,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state.status == AuthStatus.unauthenticated) {
+          if (state is AuthUnauthenticated) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -58,7 +58,7 @@ class _DiaryPageState extends State<DiaryPage> {
                 const CreatePost(),
                 BlocBuilder<PostBloc, PostState>(
                   builder: (context, state) {
-                    if (state.status != PostEventStatus.loading) {
+                    if (state is PostLoaded) {
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
