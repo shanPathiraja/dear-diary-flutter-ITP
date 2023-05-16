@@ -85,30 +85,27 @@ class _RegisterState extends State<Register> {
                             label: "Continue",
                             onPressed: _isSubmitEnable
                                 ? () {
-                              onSubmitEmail();
-                            }
+                                    onSubmitEmail();
+                                  }
                                 : null,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Already have an account? Login here',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           )
                         ],
                       ),
                     ),
-                    Visibility(
-                      visible: !isLoading,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Already have an account? Login here',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

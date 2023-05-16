@@ -40,8 +40,30 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final user = await _authRepository.login(email, password);
       emit(Authenticated(user));
+    } on FirebaseAuthException catch (exception) {
+      String title;
+      String message;
+      switch (exception.code) {
+        case "user-not-found":
+          title = "User Not found";
+          message = "Please check your email";
+          break;
+        case "network-request-failed":
+          title = 'network request failed';
+          message = "Please check internet connection";
+          break;
+        case "wrong-password":
+          title = 'Invalid Password';
+          message = "Please check Password and try again";
+          break;
+        default:
+          title = 'Unknown Error';
+          message = "Please try again later";
+          break;
+      }
+      emit(AuthError(title, message));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError("Unknown Error", e.toString()));
     }
   }
 
@@ -51,13 +73,31 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final userCredentials = await _authRepository.register(email, password);
       if (userCredentials.user == null) {
-        emit(const AuthError("User is null"));
+        emit(const AuthError("Unknown Error", "Please try again later"));
         return;
       } else {
         emit(Authenticated(userCredentials.user!));
       }
+    } on FirebaseAuthException catch (exception) {
+      String title;
+      String message;
+      switch (exception.code) {
+        case "email-already-in-use":
+          title = "Email Already in use";
+          message = "Please try another email";
+          break;
+        case "network-request-failed":
+          title = 'network request failed';
+          message = "Please check internet connection";
+          break;
+        default:
+          title = 'Unknown Error';
+          message = "Please try again later";
+          break;
+      }
+      emit(AuthError(title, message));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError("Unknown Error", e.toString()));
     }
   }
 

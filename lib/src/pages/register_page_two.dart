@@ -103,32 +103,32 @@ class _RegisterStepTwoState extends State<RegisterStepTwo> {
                               validator: Validators.isValidPassword,
                             ),
                             const SizedBox(height: 20),
-                            RoundedButton(
-                              label: "Register",
-                              onPressed: _isSubmitEnabled
-                                  ? () {
-                                      onSubmitPassword();
-                                    }
-                                  : null,
+                          RoundedButton(
+                            label: "Register",
+                            onPressed: _isSubmitEnabled
+                                ? () {
+                                    onSubmitPassword();
+                                  }
+                                : null,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Already have an account? Login here',
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Already have an account? Login here',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ],
                   ),
                 ),
               ],
