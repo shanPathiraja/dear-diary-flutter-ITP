@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dear_diary/src/repository/auth_repository.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/post_model.dart';
 
@@ -22,7 +25,7 @@ class PostRepository {
     QuerySnapshot querySnapshot = await firestoreInstance
         .collection('posts')
         .orderBy(
-          'date',
+      'date',
           descending: true,
         )
         .get();
@@ -32,5 +35,22 @@ class PostRepository {
       posts.add(Post.fromMap(data, id: doc.id));
     }
     return posts;
+  }
+
+  Future<List<Post>> mockPost() async {
+    try {
+      List<Post> posts = [];
+      const url = 'https://6463211c7a9eead6faddf147.mockapi.io/api/post';
+      var request = http.get(Uri.parse(url));
+      var response = await request;
+      var data = const JsonDecoder().convert(response.body);
+
+      for (var post in data) {
+        posts.add(Post.fromMap(post));
+      }
+      return posts;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

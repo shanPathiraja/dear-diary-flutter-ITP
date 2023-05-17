@@ -16,7 +16,9 @@ class BatteryLevelCubit extends Cubit<BatteryLevelState> {
       final Stream<int> batteryLevelStream =
           _batteryLevelProvider.getBatteryLevelStream();
       batteryLevelStream.listen((int batteryLevel) {
-        emit(BatteryLevelLoaded(batteryLevel));
+        if (!_batteryLevelProvider.isDisposed) {
+          emit(BatteryLevelLoaded(batteryLevel));
+        }
       });
     } catch (e) {
       emit(BatteryLevelError(e.toString()));
@@ -27,5 +29,11 @@ class BatteryLevelCubit extends Cubit<BatteryLevelState> {
     emit(const BatteryLevelLoading());
     final int batteryLevel = await _batteryLevelProvider.getBatteryLevel();
     emit(BatteryLevelLoaded(batteryLevel));
+  }
+
+  @override
+  Future<void> close() {
+    _batteryLevelProvider.dispose();
+    return super.close();
   }
 }

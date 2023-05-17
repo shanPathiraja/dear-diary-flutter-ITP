@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 class BatteryLevelProvider {
   MethodChannel platform =
       const MethodChannel('com.example.dear_diary/battery');
+  bool _isDisposed = false;
 
   Future<int> getBatteryLevel() async {
     int batteryLevel;
@@ -21,7 +22,7 @@ class BatteryLevelProvider {
 
   Stream<int> getBatteryLevelStream() async* {
     int batteryLevel = -1;
-    while (true) {
+    while (!_isDisposed) {
       try {
         batteryLevel = await getBatteryLevel();
         // log('Battery Level: $batteryLevel');
@@ -35,7 +36,10 @@ class BatteryLevelProvider {
     }
   }
 
+  bool get isDisposed => _isDisposed;
+
   void dispose() {
     platform.setMethodCallHandler(null);
+    _isDisposed = true;
   }
 }
