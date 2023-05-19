@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../widget/routes/routes.dart';
-import 'auth_bloc/auth_bloc.dart';
-import 'auth_bloc/auth_state.dart';
+import '../initial_page/auth_bloc/auth_bloc.dart';
+import '../initial_page/auth_bloc/auth_state.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({super.key});

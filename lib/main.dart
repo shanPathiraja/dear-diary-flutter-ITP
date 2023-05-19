@@ -1,6 +1,6 @@
 
 
-import 'package:dear_diary/src/app.dart';
+import 'package:dear_diary/src/view/initial_page/app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 
