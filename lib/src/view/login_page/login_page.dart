@@ -21,14 +21,10 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _enableSubmit = false;
-  bool _isLoading = false;
   late AuthBloc _authBloc;
 
   void onSubmit(AuthBloc authBloc) {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
 
       authBloc.add(LogInRequested(
           email: _emailController.text.trim(),
@@ -86,35 +82,39 @@ class _LoginState extends State<Login> {
                 ),
               ),
               const SizedBox(height: 20),
-              Visibility(
-                visible: !_isLoading,
-                replacement: const CircularProgressIndicator(),
-                child: Column(
-                  children: [
-                    RoundedButton(
-                      onPressed: _enableSubmit
-                          ? () {
-                              onSubmit(_authBloc);
-                            }
-                          : null,
-                      label: 'Login',
-                    ),
-                    TextButton(
-                      child: const Text(
-                        'Don\'t have an account?',
-                        style: TextStyle(
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
+              BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (previous, current) =>
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) {
+                    if (state.isLoading) {
+                      return const CircularProgressIndicator();
+                    }
+                    return Column(
+                      children: [
+                        RoundedButton(
+                          onPressed: _enableSubmit
+                              ? () {
+                                  onSubmit(_authBloc);
+                                }
+                              : null,
+                          label: 'Login',
                         ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(Routes.registerOne);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                        TextButton(
+                          child: const Text(
+                            'Don\'t have an account?',
+                            style: TextStyle(
+                              color: Colors.black,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(Routes.registerOne);
+                          },
+                        ),
+                      ],
+                    );
+                  }),
             ],
           ),
         ),
@@ -156,15 +156,6 @@ class _LoginState extends State<Login> {
                       ],
                     ));
           }),
-      BlocListener<AuthBloc, AuthState>(
-        listenWhen: (previous, current) =>
-            previous.isLoading != current.isLoading,
-        listener: (context, state) {
-          setState(() {
-            _isLoading = state.isLoading;
-          });
-        },
-      )
     ], child: body);
   }
 }
